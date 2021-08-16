@@ -1,5 +1,5 @@
 {
-	"name": "terser Codespace",
+	"name": "terser devcontainer",
 	"settings": {
 		"workbench.colorTheme": "Default Dark+",
 		"terminal.integrated.defaultProfile.linux": "bash"
