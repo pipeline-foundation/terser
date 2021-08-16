@@ -20,7 +20,7 @@
 		"ms-vscode.vscode-typescript-next",
 		"ecmel.vscode-html-css",
 	],
-	"postCreateCommand": "",
+	"postCreateCommand": "npm install --save-dev",
 	"build": {
 		"dockerfile": "Dockerfile"
 	}
