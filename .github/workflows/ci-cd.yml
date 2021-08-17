@@ -1,0 +1,50 @@
+name: CI pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        node-version: [ 10.x, 12.x, 14.x, 16.x ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Create logs directory
+        run: |
+          mkdir -p logs
+
+      - name: Install dependencies
+        run: |
+          npm ci --loglevel verbose 2>&1 | tee logs/install.log
+
+      - name: Build the app
+        run: |
+          npm run build --if-present --loglevel verbose 2>&1 | tee logs/build.log
+
+      - name: Run compress tests
+        run: |
+          npm test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
+
+      - name: Run mocha tests
+        run: |
+          npm test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
+
+      - name: Upload logs as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Logs ${{ matrix.node-version }}
+          path: logs/
