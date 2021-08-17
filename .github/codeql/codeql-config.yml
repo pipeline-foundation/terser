@@ -6,4 +6,5 @@ paths-ignore:
 queries:
   - uses: security-and-quality
 
-languages: javascript
+languages: 
+  - javascript
