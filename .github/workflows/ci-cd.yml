@@ -4,6 +4,7 @@ on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
   build:
+    name: "Build OS: ${{ matrix.os }} | NodeJS: ${{ matrix.node-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -33,11 +34,11 @@ jobs:
 
       - name: Run compress tests
         run: |
-          npm run test:compress 2>&1 | tee logs/compress_test.log
+          npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
 
       - name: Run mocha tests
         run: |
-          npm run test:mocha 2>&1 | tee logs/mocha_test.log
+          npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
 
       - name: Upload logs as artifact
         uses: actions/upload-artifact@v2
