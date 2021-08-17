@@ -1,0 +1,9 @@
+name: "CodeQL config"
+
+paths-ignore: 
+  - test/**
+
+queries:
+  - uses: security-and-quality
+
+languages: javascript
