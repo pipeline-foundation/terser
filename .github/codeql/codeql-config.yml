@@ -4,7 +4,5 @@ paths-ignore:
   - test/**
 
 queries:
-  - uses: security-and-quality
-
-languages: 
-  - javascript
+  - name: Security and quality internal queries
+    uses: security-and-quality
