@@ -31,14 +31,25 @@ jobs:
       - name: Build the app
         run: |
           npm run build --if-present --loglevel verbose 2>&1 | tee logs/build.log
+        env:
+          TEST_NO_SANDBOX: 1
+          TERSER_TEST_ALL: 1
 
       - name: Run compress tests
         run: |
-          npm run test:compress --require esm --loglevel verbose 2>&1 | tee logs/compress_test.log
+          npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
 
       - name: Run mocha tests
         run: |
-          npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
+          npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
+
+      - if: matrix.node-version == '10.x'
+        name: Run tests on ${{ matrix.node-version }}
+        run: |
+          node --require esm test/compress.js
+          npm run test:mocha -- --require esm
+        env:
+          TEST_NO_SANDBOX: 1
 
       - name: Upload logs as artifact
         uses: actions/upload-artifact@v2
