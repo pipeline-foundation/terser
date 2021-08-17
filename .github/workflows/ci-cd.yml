@@ -21,14 +21,17 @@ jobs:
           cache: 'npm'
 
       - name: Create logs directory
+        shell: bash
         run: |
           mkdir -p logs
 
       - name: Install dependencies
+        shell: bash
         run: |
           npm ci --loglevel verbose 2>&1 | tee logs/install.log
 
       - name: Build the app
+        shell: bash
         run: |
           npm run build --if-present --loglevel verbose 2>&1 | tee logs/build.log
         env:
@@ -37,16 +40,19 @@ jobs:
 
       - if: matrix.node-version != '10.x'
         name: Run compress tests
+        shell: bash
         run: |
           npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
 
       - if: matrix.node-version != '10.x'
         name: Run mocha tests
+        shell: bash
         run: |
           npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
 
       - if: matrix.node-version == '10.x'
         name: Run all tests on Node ${{ matrix.node-version }}
+        shell: bash
         run: |
           node --require esm test/compress.js --loglevel verbose 2>&1 | tee logs/compress_test.log
           npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
