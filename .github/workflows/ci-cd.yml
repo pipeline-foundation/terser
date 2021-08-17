@@ -4,7 +4,7 @@ on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
   build:
-    name: "Build OS: ${{ matrix.os }} | NodeJS: ${{ matrix.node-version }}"
+    name: "Build OS: ${{ matrix.os }} | Node: ${{ matrix.node-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -35,19 +35,21 @@ jobs:
           TEST_NO_SANDBOX: 1
           TERSER_TEST_ALL: 1
 
-      - name: Run compress tests
+      - if: matrix.node-version != '10.x'
+        name: Run compress tests
         run: |
           npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
 
-      - name: Run mocha tests
+      - if: matrix.node-version != '10.x'
+        name: Run mocha tests
         run: |
           npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
 
       - if: matrix.node-version == '10.x'
-        name: Run tests on ${{ matrix.node-version }}
+        name: Run all tests on Node ${{ matrix.node-version }}
         run: |
-          node --require esm test/compress.js
-          npm run test:mocha -- --require esm
+          node --require esm test/compress.js --loglevel verbose 2>&1 | tee logs/compress_test.log
+          npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
         env:
           TEST_NO_SANDBOX: 1
 
