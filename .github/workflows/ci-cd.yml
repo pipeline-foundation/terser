@@ -59,12 +59,10 @@ jobs:
         env:
           TEST_NO_SANDBOX: 1
 
-      - if: matrix.os == 'ubuntu-latest' && (matrix.node-version == '10.x' || matrix.node-version == '12.x') 
+      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
         name: Run functional tests
-        shell: sh
         run: |
-          # chmod u+x ./test/functional.sh
-          ./test/functional.sh
+          ./test/functional.sh 2>&1 | tee logs/functional_tests.log
 
       - name: Upload logs as artifact
         uses: actions/upload-artifact@v2
