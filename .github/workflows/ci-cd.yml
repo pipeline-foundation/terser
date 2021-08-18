@@ -4,7 +4,7 @@ on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
   build:
-    name: "Build OS: ${{ matrix.os }} | Node: ${{ matrix.node-version }}"
+    name: "Build ${{ matrix.os }} node${{ matrix.node-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -58,6 +58,13 @@ jobs:
           npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
         env:
           TEST_NO_SANDBOX: 1
+
+      - if: matrix.os == 'ubuntu-latest'
+        name: Run functional tests
+        shell: sh
+        run: |
+          # chmod u+x ./test/functional.sh
+          ./test/functional.sh
 
       - name: Upload logs as artifact
         uses: actions/upload-artifact@v2
