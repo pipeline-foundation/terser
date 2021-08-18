@@ -59,7 +59,7 @@ jobs:
         env:
           TEST_NO_SANDBOX: 1
 
-      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '10.x' && matrix.node-version == '12.x'
+      - if: matrix.os == 'ubuntu-latest' && (matrix.node-version == '10.x' || matrix.node-version == '12.x') 
         name: Run functional tests
         shell: sh
         run: |
