@@ -51,7 +51,7 @@ jobs:
           npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
 
       - if: matrix.node-version == '10.x'
-        name: Run all tests with Node ${{ matrix.node-version }}
+        name: Run all tests with Node 10.x
         shell: sh
         run: |
           node --require esm test/compress.js --loglevel verbose 2>&1 | tee logs/compress_test.log
@@ -60,7 +60,7 @@ jobs:
           TEST_NO_SANDBOX: 1
 
       - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
-        name: Run functional tests on ${{ matrix.os }} with Node ${{ matrix.node-version }}
+        name: Run functional tests on ${{ matrix.os }} with Node 12.x
         run: |
           ./test/functional.sh 2>&1 | tee logs/functional_tests.log
 
