@@ -148,7 +148,7 @@ jobs:
           path: logs/
 
   deploy:
-    if: needs.build.outputs.package_version != ''
+    if: needs.build.outputs.should_deploy == 'true'
     needs: build
     runs-on: ubuntu-latest
     steps:
